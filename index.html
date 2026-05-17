@@ -1,1 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HomeDishPicker 家常菜抽签系统</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main class="app">
+    <section class="hero" aria-labelledby="page-title">
+      <p class="eyebrow">HomeDishPicker</p>
+      <h1 id="page-title">家常菜抽签系统</h1>
+      <p class="intro">不知道今天吃什么？点一下，帮你从家常菜里抽一道。</p>
+    </section>
 
+    <section class="picker" aria-labelledby="picker-title">
+      <h2 id="picker-title">今天吃什么</h2>
+      <p id="dish-result" class="result" aria-live="polite">点击按钮开始抽签</p>
+      <button id="pick-button" class="pick-button" type="button">抽一道菜</button>
+    </section>
+
+    <section class="dish-list" aria-labelledby="dish-list-title">
+      <h2 id="dish-list-title">候选家常菜</h2>
+      <ul id="dish-list"></ul>
+    </section>
+  </main>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
