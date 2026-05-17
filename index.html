@@ -11,17 +11,67 @@
     <section class="hero" aria-labelledby="page-title">
       <p class="eyebrow">HomeDishPicker</p>
       <h1 id="page-title">家常菜抽签系统</h1>
-      <p class="intro">不知道今天吃什么？点一下，帮你从家常菜里抽一道。</p>
+      <p class="intro">告诉我冰箱里有什么，系统会推荐能做的家常菜，再帮你抽一道。</p>
     </section>
 
-    <section class="picker" aria-labelledby="picker-title">
-      <h2 id="picker-title">今天吃什么</h2>
+    <section class="panel picker" aria-labelledby="picker-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">今天吃什么</p>
+          <h2 id="picker-title">随机抽一道菜</h2>
+        </div>
+        <p id="match-count" class="match-count">当前使用全部菜品抽签</p>
+      </div>
+
       <p id="dish-result" class="result" aria-live="polite">点击按钮开始抽签</p>
+      <a id="tutorial-link" class="tutorial-link hidden" href="#" target="_blank" rel="noreferrer">查看小红书教程</a>
       <button id="pick-button" class="pick-button" type="button">抽一道菜</button>
     </section>
 
-    <section class="dish-list" aria-labelledby="dish-list-title">
-      <h2 id="dish-list-title">候选家常菜</h2>
+    <section class="panel fridge" aria-labelledby="fridge-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">冰箱食材</p>
+          <h2 id="fridge-title">输入你现有的菜</h2>
+        </div>
+      </div>
+
+      <label class="field">
+        <span>食材名称</span>
+        <textarea id="fridge-input" rows="3" placeholder="例如：鸡蛋、番茄、土豆、青椒"></textarea>
+      </label>
+      <p class="hint">多个食材可以用顿号、逗号、空格或换行分隔。</p>
+    </section>
+
+    <section class="panel add-dish" aria-labelledby="add-dish-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">扩充抽签库</p>
+          <h2 id="add-dish-title">添加我会做的菜</h2>
+        </div>
+      </div>
+
+      <form id="dish-form" class="dish-form">
+        <label class="field">
+          <span>菜名</span>
+          <input id="dish-name-input" type="text" placeholder="例如：蒜蓉西兰花" required>
+        </label>
+        <label class="field">
+          <span>需要的食材</span>
+          <input id="dish-ingredients-input" type="text" placeholder="例如：西兰花、蒜">
+        </label>
+        <button class="secondary-button" type="submit">添加到抽签库</button>
+      </form>
+      <p id="form-message" class="form-message" aria-live="polite"></p>
+    </section>
+
+    <section class="panel dish-list" aria-labelledby="dish-list-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">抽签库</p>
+          <h2 id="dish-list-title">候选家常菜</h2>
+        </div>
+      </div>
       <ul id="dish-list"></ul>
     </section>
   </main>

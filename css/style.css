@@ -6,25 +6,26 @@ body {
   margin: 0;
   min-height: 100vh;
   font-family: Arial, "Microsoft YaHei", sans-serif;
-  color: #25302b;
-  background: #f5f2ea;
+  color: #26312c;
+  background: #f6f2ea;
 }
 
 .app {
-  width: min(920px, calc(100% - 32px));
+  width: min(960px, calc(100% - 32px));
   margin: 0 auto;
-  padding: 48px 0;
+  padding: 44px 0;
 }
 
 .hero {
-  margin-bottom: 28px;
+  margin-bottom: 26px;
 }
 
-.eyebrow {
+.eyebrow,
+.section-kicker {
   margin: 0 0 8px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
-  color: #47705b;
+  color: #557361;
   text-transform: uppercase;
 }
 
@@ -37,39 +38,56 @@ p {
 h1 {
   margin-bottom: 12px;
   font-size: clamp(34px, 7vw, 56px);
-  line-height: 1.05;
+  line-height: 1.08;
 }
 
 h2 {
-  margin-bottom: 16px;
+  margin-bottom: 0;
   font-size: 22px;
 }
 
 .intro {
-  max-width: 560px;
+  max-width: 640px;
   margin-bottom: 0;
   font-size: 18px;
   line-height: 1.7;
-  color: #57645d;
+  color: #5d6962;
 }
 
-.picker,
-.dish-list {
+.panel {
   margin-top: 20px;
   padding: 24px;
-  border: 1px solid #ddd5c8;
+  border: 1px solid #ded5c7;
   border-radius: 8px;
   background: #fffaf1;
   box-shadow: 0 12px 30px rgba(73, 58, 35, 0.08);
 }
 
+.section-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.match-count {
+  margin: 0;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: #eef5ee;
+  color: #476452;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
 .result {
-  min-height: 72px;
-  margin-bottom: 20px;
+  min-height: 82px;
+  margin-bottom: 12px;
   padding: 20px;
   border-radius: 8px;
   background: #fff;
-  font-size: 28px;
+  font-size: 30px;
   font-weight: 700;
   line-height: 1.2;
   color: #bf4f2f;
@@ -77,61 +95,194 @@ h2 {
   align-items: center;
   justify-content: center;
   text-align: center;
+  border: 1px solid #efe7da;
 }
 
-.pick-button {
+.result.is-rolling {
+  color: #2f7d57;
+  transform: scale(1.02);
+}
+
+.tutorial-link {
+  display: inline-flex;
+  margin-bottom: 16px;
+  color: #2f7d57;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.tutorial-link:hover {
+  text-decoration: underline;
+}
+
+.hidden {
+  display: none;
+}
+
+.pick-button,
+.secondary-button {
   width: 100%;
   min-height: 52px;
   border: 0;
   border-radius: 8px;
-  background: #2f7d57;
   color: #fff;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 700;
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
-.pick-button:hover {
-  background: #256747;
+.pick-button {
+  background: #2f7d57;
+}
+
+.secondary-button {
+  background: #8b5e34;
+}
+
+.pick-button:hover,
+.secondary-button:hover {
   transform: translateY(-1px);
 }
 
-.pick-button:focus-visible {
+.pick-button:hover {
+  background: #256747;
+}
+
+.secondary-button:hover {
+  background: #744c29;
+}
+
+.pick-button:disabled {
+  background: #8aa392;
+  cursor: wait;
+  transform: none;
+}
+
+.pick-button:focus-visible,
+.secondary-button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
   outline: 3px solid #f0b35a;
   outline-offset: 3px;
 }
 
+.field {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 14px;
+  font-weight: 700;
+}
+
+input,
+textarea {
+  width: 100%;
+  border: 1px solid #d8cfbf;
+  border-radius: 8px;
+  padding: 12px 14px;
+  background: #fff;
+  color: #26312c;
+  font: inherit;
+  resize: vertical;
+}
+
+.hint,
+.form-message {
+  margin-bottom: 0;
+  color: #6a756f;
+  line-height: 1.6;
+}
+
+.form-message.success {
+  color: #2f7d57;
+}
+
+.form-message.error {
+  color: #bf4f2f;
+}
+
+.dish-form {
+  display: grid;
+  gap: 4px;
+}
+
 .dish-list ul {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   gap: 12px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.dish-list li {
-  padding: 12px 14px;
+.dish-card {
+  min-height: 134px;
+  padding: 14px;
   border-radius: 8px;
   background: #ffffff;
-  color: #38443e;
-  text-align: center;
   border: 1px solid #ebe4d8;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-@media (max-width: 520px) {
+.dish-card strong {
+  font-size: 18px;
+}
+
+.ingredients {
+  margin: 0;
+  color: #6a756f;
+  line-height: 1.5;
+}
+
+.card-actions {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.match-badge {
+  padding: 5px 8px;
+  border-radius: 999px;
+  background: #eef5ee;
+  color: #476452;
+  font-size: 12px;
+}
+
+.dish-card a {
+  color: #2f7d57;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.dish-card a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
   .app {
-    width: min(100% - 20px, 920px);
+    width: min(100% - 20px, 960px);
     padding: 28px 0;
   }
 
-  .picker,
-  .dish-list {
+  .panel {
     padding: 18px;
   }
 
+  .section-heading {
+    display: block;
+  }
+
+  .match-count {
+    display: inline-flex;
+    margin-top: 12px;
+    white-space: normal;
+  }
+
   .result {
-    font-size: 24px;
+    font-size: 25px;
   }
 }
