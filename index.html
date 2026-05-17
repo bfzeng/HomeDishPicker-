@@ -24,7 +24,11 @@
       </div>
 
       <p id="dish-result" class="result" aria-live="polite">点击按钮开始抽签</p>
-      <a id="tutorial-link" class="tutorial-link hidden" href="#" target="_blank" rel="noreferrer">查看小红书教程</a>
+      <a id="tutorial-link" class="tutorial-link hidden" href="#" target="_blank" rel="noreferrer">查看教程</a>
+      <label class="toggle-row">
+        <input id="no-repeat-toggle" type="checkbox">
+        <span>开启不重复抽取</span>
+      </label>
       <button id="pick-button" class="pick-button" type="button">抽一道菜</button>
     </section>
 
@@ -37,9 +41,18 @@
         <p class="match-count">包含抽签库和新菜灵感</p>
       </div>
 
+      <label class="field compact-field">
+        <span>新菜分类</span>
+        <select id="new-dish-category">
+          <option value="全部">全部</option>
+        </select>
+      </label>
       <p id="new-dish-result" class="result result-secondary" aria-live="polite">点击按钮随机找一道新灵感</p>
-      <a id="new-dish-tutorial-link" class="tutorial-link hidden" href="#" target="_blank" rel="noreferrer">查看小红书教程</a>
-      <button id="new-dish-button" class="secondary-button" type="button">随机挑一道新菜</button>
+      <a id="new-dish-tutorial-link" class="tutorial-link hidden" href="#" target="_blank" rel="noreferrer">查看教程</a>
+      <div class="button-grid">
+        <button id="new-dish-button" class="secondary-button" type="button">随机挑一道新菜</button>
+        <button id="save-new-dish-button" class="ghost-button" type="button" disabled>加入我的抽签库</button>
+      </div>
     </section>
 
     <section class="panel fridge" aria-labelledby="fridge-title">
@@ -50,10 +63,12 @@
         </div>
       </div>
 
+      <div id="quick-ingredient-tags" class="tag-list" aria-label="快捷食材标签"></div>
       <label class="field">
         <span>食材名称</span>
         <textarea id="fridge-input" rows="3" placeholder="例如：鸡蛋、番茄、土豆、青椒"></textarea>
       </label>
+      <button id="clear-fridge-button" class="ghost-button" type="button">清空食材</button>
       <p class="hint">多个食材可以用顿号、逗号、空格或换行分隔。系统会优先从匹配食材的菜里抽选。</p>
     </section>
 
@@ -66,6 +81,7 @@
       </div>
 
       <form id="dish-form" class="dish-form">
+        <input id="editing-dish-name" type="hidden">
         <label class="field">
           <span>菜名</span>
           <input id="dish-name-input" type="text" list="dish-suggestions" placeholder="例如：蒜蓉西兰花" required>
@@ -75,9 +91,63 @@
           <span>需要的食材</span>
           <input id="dish-ingredients-input" type="text" placeholder="输入菜名后自动补充，可手动调整">
         </label>
-        <button class="secondary-button" type="submit">添加到抽签库</button>
+        <div class="form-grid">
+          <label class="field">
+            <span>分类</span>
+            <input id="dish-category-input" type="text" placeholder="例如：快手下饭">
+          </label>
+          <label class="field">
+            <span>状态</span>
+            <select id="dish-status-input">
+              <option value="已做过">已做过</option>
+              <option value="常吃">常吃</option>
+              <option value="想尝试">想尝试</option>
+            </select>
+          </label>
+        </div>
+        <label class="field">
+          <span>固定教程链接</span>
+          <input id="dish-tutorial-input" type="url" placeholder="可选，例如小红书、B 站、下厨房教程链接">
+        </label>
+        <label class="field">
+          <span>备注</span>
+          <input id="dish-note-input" type="text" placeholder="可选，例如 10 分钟快手菜、适合带饭">
+        </label>
+        <div class="button-grid">
+          <button id="submit-dish-button" class="secondary-button" type="submit">添加到抽签库</button>
+          <button id="cancel-edit-button" class="ghost-button hidden" type="button">取消编辑</button>
+        </div>
       </form>
       <p id="form-message" class="form-message" aria-live="polite"></p>
+    </section>
+
+    <section class="panel data-tools" aria-labelledby="data-tools-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">数据管理</p>
+          <h2 id="data-tools-title">备份、导入和重置</h2>
+        </div>
+      </div>
+      <div class="button-grid">
+        <button id="export-button" class="ghost-button" type="button">导出抽签库 JSON</button>
+        <label class="file-button">
+          导入抽签库 JSON
+          <input id="import-file-input" type="file" accept="application/json,.json">
+        </label>
+        <button id="reset-button" class="danger-button" type="button">重置自定义数据</button>
+      </div>
+      <p id="data-message" class="form-message" aria-live="polite"></p>
+    </section>
+
+    <section class="panel history" aria-labelledby="history-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">抽签历史</p>
+          <h2 id="history-title">最近抽中过什么</h2>
+        </div>
+        <button id="clear-history-button" class="text-button" type="button">清空历史</button>
+      </div>
+      <ol id="history-list" class="history-list"></ol>
     </section>
 
     <section class="panel dish-library" aria-labelledby="dish-list-title">
@@ -86,6 +156,15 @@
           <p class="section-kicker">抽签库</p>
           <h2 id="dish-list-title">我会做的家常菜</h2>
         </div>
+        <label class="field compact-field">
+          <span>状态筛选</span>
+          <select id="library-status-filter">
+            <option value="全部">全部</option>
+            <option value="常吃">常吃</option>
+            <option value="已做过">已做过</option>
+            <option value="想尝试">想尝试</option>
+          </select>
+        </label>
       </div>
       <div id="dish-groups" class="dish-groups"></div>
     </section>

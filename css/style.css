@@ -116,7 +116,8 @@ h2 {
 }
 
 .tutorial-link:hover,
-.dish-card a:hover {
+.dish-card a:hover,
+.history-list a:hover {
   text-decoration: underline;
 }
 
@@ -125,12 +126,14 @@ h2 {
 }
 
 .pick-button,
-.secondary-button {
+.secondary-button,
+.ghost-button,
+.danger-button,
+.file-button {
   width: 100%;
   min-height: 52px;
-  border: 0;
+  border: 1px solid transparent;
   border-radius: 8px;
-  color: #fff;
   font-size: 17px;
   font-weight: 700;
   cursor: pointer;
@@ -139,14 +142,39 @@ h2 {
 
 .pick-button {
   background: #2f7d57;
+  color: #fff;
 }
 
 .secondary-button {
   background: #8b5e34;
+  color: #fff;
+}
+
+.ghost-button,
+.file-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  color: #2f7d57;
+  border-color: #b9d1c1;
+}
+
+.danger-button {
+  background: #fff;
+  color: #a33b2d;
+  border-color: #e3b8ad;
+}
+
+.file-button input {
+  display: none;
 }
 
 .pick-button:hover,
-.secondary-button:hover {
+.secondary-button:hover,
+.ghost-button:hover,
+.danger-button:hover,
+.file-button:hover {
   transform: translateY(-1px);
 }
 
@@ -158,18 +186,34 @@ h2 {
   background: #744c29;
 }
 
+.ghost-button:hover,
+.file-button:hover {
+  background: #edf6f0;
+}
+
+.danger-button:hover {
+  background: #fff2ef;
+}
+
 .pick-button:disabled,
-.secondary-button:disabled {
+.secondary-button:disabled,
+.ghost-button:disabled {
   background: #8aa392;
+  color: #fff;
   cursor: wait;
   transform: none;
 }
 
 .pick-button:focus-visible,
 .secondary-button:focus-visible,
+.ghost-button:focus-visible,
+.danger-button:focus-visible,
+.text-button:focus-visible,
+.file-button:focus-within,
 summary:focus-visible,
 input:focus-visible,
-textarea:focus-visible {
+textarea:focus-visible,
+select:focus-visible {
   outline: 3px solid #f0b35a;
   outline-offset: 3px;
 }
@@ -182,7 +226,8 @@ textarea:focus-visible {
 }
 
 input,
-textarea {
+textarea,
+select {
   width: 100%;
   border: 1px solid #d8cfbf;
   border-radius: 8px;
@@ -191,6 +236,14 @@ textarea {
   color: #26312c;
   font: inherit;
   resize: vertical;
+}
+
+select {
+  resize: none;
+}
+
+.compact-field {
+  max-width: 260px;
 }
 
 .hint,
@@ -211,6 +264,59 @@ textarea {
 .dish-form {
   display: grid;
   gap: 4px;
+}
+
+.form-grid,
+.button-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  color: #4c5d53;
+  font-weight: 700;
+}
+
+.toggle-row input {
+  width: 18px;
+  height: 18px;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.tag {
+  border: 1px solid #cadccf;
+  border-radius: 999px;
+  padding: 8px 12px;
+  background: #fff;
+  color: #365544;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.tag.is-selected {
+  background: #2f7d57;
+  border-color: #2f7d57;
+  color: #fff;
+}
+
+.tag:hover {
+  background: #edf6f0;
+}
+
+.tag.is-selected:hover {
+  background: #256747;
 }
 
 .dish-groups {
@@ -262,7 +368,8 @@ textarea {
   font-size: 18px;
 }
 
-.ingredients {
+.ingredients,
+.dish-note {
   margin: 0;
   color: #6a756f;
   line-height: 1.5;
@@ -276,6 +383,12 @@ textarea {
   gap: 10px;
 }
 
+.compact-actions {
+  justify-content: flex-start;
+  gap: 14px;
+  min-height: 28px;
+}
+
 .match-badge {
   padding: 5px 8px;
   border-radius: 999px;
@@ -284,10 +397,60 @@ textarea {
   font-size: 12px;
 }
 
-.dish-card a {
+.dish-card a,
+.history-list a {
   color: #2f7d57;
   font-weight: 700;
   text-decoration: none;
+}
+
+.text-button {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: #2f7d57;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.danger-text {
+  color: #a33b2d;
+}
+
+.quiet-text {
+  color: #8a958f;
+  font-size: 13px;
+}
+
+.history-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding-left: 20px;
+}
+
+.history-list li {
+  padding: 10px 0;
+  border-bottom: 1px solid #eadfce;
+}
+
+.history-list span {
+  display: inline-block;
+  min-width: 110px;
+  font-weight: 700;
+}
+
+.history-list small {
+  color: #6a756f;
+}
+
+.history-list a {
+  margin-left: 10px;
+}
+
+.empty-state {
+  color: #6a756f;
 }
 
 @media (max-width: 640px) {
@@ -314,7 +477,13 @@ textarea {
     font-size: 25px;
   }
 
-  .dish-grid {
+  .dish-grid,
+  .form-grid,
+  .button-grid {
     grid-template-columns: 1fr;
+  }
+
+  .compact-field {
+    max-width: none;
   }
 }
