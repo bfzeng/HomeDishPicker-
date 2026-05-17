@@ -263,6 +263,12 @@ function bindEvents(elements) {
     if (!form) return;
     renameCategory(form.dataset.categoryForm, form.querySelector("input").value, elements);
   });
+
+  document.addEventListener("click", (event) => {
+    const link = event.target.closest("[data-app-url]");
+    if (!link) return;
+    openTutorialLink(event, link);
+  });
 }
 
 function renderAll(elements) {
@@ -646,7 +652,7 @@ function renderDishGroups(elements) {
           <p class="dish-note">${escapeHtml(dish.status || "已做过")} · ${escapeHtml(dish.note || "暂无备注")}</p>
           <div class="card-actions">
             <span class="match-badge">${escapeHtml(getRecommendationLabel(dish, isMatched))}</span>
-            <a href="${escapeAttribute(getTutorialUrl(dish))}" target="_blank" rel="noreferrer">教程</a>
+            <a href="${escapeAttribute(getTutorialUrl(dish))}" data-app-url="${escapeAttribute(getTutorialAppUrl(dish))}" data-fallback-url="${escapeAttribute(getTutorialUrl(dish))}" target="_blank" rel="noreferrer">教程</a>
           </div>
           <div class="card-actions compact-actions">
             ${isCustom ? `<button class="text-button" type="button" data-edit-dish="${escapeAttribute(dish.name)}">编辑</button><button class="text-button danger-text" type="button" data-delete-dish="${escapeAttribute(dish.name)}">删除</button>` : `<span class="quiet-text">默认菜品</span>`}
@@ -681,7 +687,7 @@ function renderMatchedDishPanel(elements) {
         <li>
           <span>${escapeHtml(dish.name)}</span>
           <small>${escapeHtml(getRecommendationLabel(dish, true))}</small>
-          <a href="${escapeAttribute(getTutorialUrl(dish))}" target="_blank" rel="noreferrer">教程</a>
+          <a href="${escapeAttribute(getTutorialUrl(dish))}" data-app-url="${escapeAttribute(getTutorialAppUrl(dish))}" data-fallback-url="${escapeAttribute(getTutorialUrl(dish))}" target="_blank" rel="noreferrer">教程</a>
         </li>
       `).join("")}
     </ul>
@@ -745,7 +751,7 @@ function renderHistory(listElement) {
       <li>
         <span>${escapeHtml(item.name)}</span>
         <small>${escapeHtml(item.source)} · ${escapeHtml(item.time)}</small>
-        <a href="${escapeAttribute(item.tutorialUrl)}" target="_blank" rel="noreferrer">教程</a>
+        <a href="${escapeAttribute(item.tutorialUrl)}" data-app-url="${escapeAttribute(buildAppSearchUrl(item.name))}" data-fallback-url="${escapeAttribute(item.tutorialUrl)}" target="_blank" rel="noreferrer">教程</a>
       </li>
     `;
   }).join("");
@@ -771,6 +777,8 @@ function updateMatchCount(matchCountElement) {
 
 function updateTutorialLink(linkElement, dish) {
   linkElement.href = getTutorialUrl(dish);
+  linkElement.dataset.appUrl = getTutorialAppUrl(dish);
+  linkElement.dataset.fallbackUrl = getTutorialUrl(dish);
   linkElement.textContent = `查看「${dish.name}」教程`;
   linkElement.classList.remove("hidden");
 }
@@ -886,6 +894,45 @@ function getTutorialUrl(dish) {
 
 function buildSearchUrl(dishName) {
   return `https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(`${dishName} 教程`)}`;
+}
+
+function getTutorialAppUrl(dish) {
+  return buildAppSearchUrl(dish.name);
+}
+
+function buildAppSearchUrl(dishName) {
+  const params = new URLSearchParams({
+    keyword: `${dishName} 教程`,
+    target_search: "notes",
+    source: "deeplink"
+  });
+
+  return `xhsdiscover://search/result?${params.toString()}`;
+}
+
+function openTutorialLink(event, link) {
+  const appUrl = link.dataset.appUrl;
+  const fallbackUrl = link.dataset.fallbackUrl || link.href;
+
+  if (!appUrl) return;
+
+  event.preventDefault();
+
+  let fallbackTimer = window.setTimeout(() => {
+    window.location.href = fallbackUrl;
+  }, 1200);
+
+  const cancelFallback = () => {
+    window.clearTimeout(fallbackTimer);
+    fallbackTimer = null;
+  };
+
+  window.addEventListener("pagehide", cancelFallback, { once: true });
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) cancelFallback();
+  }, { once: true });
+
+  window.location.href = appUrl;
 }
 
 function findDishSuggestion(name) {
