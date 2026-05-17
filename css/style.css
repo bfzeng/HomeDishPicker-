@@ -11,7 +11,7 @@ body {
 }
 
 .app {
-  width: min(960px, calc(100% - 32px));
+  width: min(980px, calc(100% - 32px));
   margin: 0 auto;
   padding: 44px 0;
 }
@@ -47,7 +47,7 @@ h2 {
 }
 
 .intro {
-  max-width: 640px;
+  max-width: 690px;
   margin-bottom: 0;
   font-size: 18px;
   line-height: 1.7;
@@ -98,6 +98,10 @@ h2 {
   border: 1px solid #efe7da;
 }
 
+.result-secondary {
+  color: #7a4f21;
+}
+
 .result.is-rolling {
   color: #2f7d57;
   transform: scale(1.02);
@@ -111,7 +115,8 @@ h2 {
   text-decoration: none;
 }
 
-.tutorial-link:hover {
+.tutorial-link:hover,
+.dish-card a:hover {
   text-decoration: underline;
 }
 
@@ -153,7 +158,8 @@ h2 {
   background: #744c29;
 }
 
-.pick-button:disabled {
+.pick-button:disabled,
+.secondary-button:disabled {
   background: #8aa392;
   cursor: wait;
   transform: none;
@@ -161,6 +167,7 @@ h2 {
 
 .pick-button:focus-visible,
 .secondary-button:focus-visible,
+summary:focus-visible,
 input:focus-visible,
 textarea:focus-visible {
   outline: 3px solid #f0b35a;
@@ -206,12 +213,33 @@ textarea {
   gap: 4px;
 }
 
-.dish-list ul {
+.dish-groups {
+  display: grid;
+  gap: 12px;
+}
+
+.dish-group {
+  border: 1px solid #ebe4d8;
+  border-radius: 8px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.dish-group summary {
+  padding: 15px 16px;
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: 700;
+  color: #344239;
+  background: #fff8ec;
+}
+
+.dish-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   gap: 12px;
   margin: 0;
-  padding: 0;
+  padding: 14px;
   list-style: none;
 }
 
@@ -224,6 +252,10 @@ textarea {
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.dish-card.is-muted {
+  opacity: 0.58;
 }
 
 .dish-card strong {
@@ -258,13 +290,9 @@ textarea {
   text-decoration: none;
 }
 
-.dish-card a:hover {
-  text-decoration: underline;
-}
-
 @media (max-width: 640px) {
   .app {
-    width: min(100% - 20px, 960px);
+    width: min(100% - 20px, 980px);
     padding: 28px 0;
   }
 
@@ -284,5 +312,9 @@ textarea {
 
   .result {
     font-size: 25px;
+  }
+
+  .dish-grid {
+    grid-template-columns: 1fr;
   }
 }

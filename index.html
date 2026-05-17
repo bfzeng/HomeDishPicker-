@@ -11,14 +11,14 @@
     <section class="hero" aria-labelledby="page-title">
       <p class="eyebrow">HomeDishPicker</p>
       <h1 id="page-title">家常菜抽签系统</h1>
-      <p class="intro">告诉我冰箱里有什么，系统会推荐能做的家常菜，再帮你抽一道。</p>
+      <p class="intro">管理我会做的菜，结合冰箱食材抽签；想换口味时，也可以随机发现一道新菜。</p>
     </section>
 
     <section class="panel picker" aria-labelledby="picker-title">
       <div class="section-heading">
         <div>
-          <p class="section-kicker">今天吃什么</p>
-          <h2 id="picker-title">随机抽一道菜</h2>
+          <p class="section-kicker">我的抽签库</p>
+          <h2 id="picker-title">从会做的菜里抽一道</h2>
         </div>
         <p id="match-count" class="match-count">当前使用全部菜品抽签</p>
       </div>
@@ -26,6 +26,20 @@
       <p id="dish-result" class="result" aria-live="polite">点击按钮开始抽签</p>
       <a id="tutorial-link" class="tutorial-link hidden" href="#" target="_blank" rel="noreferrer">查看小红书教程</a>
       <button id="pick-button" class="pick-button" type="button">抽一道菜</button>
+    </section>
+
+    <section class="panel new-dish" aria-labelledby="new-dish-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">想吃点新的</p>
+          <h2 id="new-dish-title">随机发现一道菜</h2>
+        </div>
+        <p class="match-count">包含抽签库和新菜灵感</p>
+      </div>
+
+      <p id="new-dish-result" class="result result-secondary" aria-live="polite">点击按钮随机找一道新灵感</p>
+      <a id="new-dish-tutorial-link" class="tutorial-link hidden" href="#" target="_blank" rel="noreferrer">查看小红书教程</a>
+      <button id="new-dish-button" class="secondary-button" type="button">随机挑一道新菜</button>
     </section>
 
     <section class="panel fridge" aria-labelledby="fridge-title">
@@ -40,7 +54,7 @@
         <span>食材名称</span>
         <textarea id="fridge-input" rows="3" placeholder="例如：鸡蛋、番茄、土豆、青椒"></textarea>
       </label>
-      <p class="hint">多个食材可以用顿号、逗号、空格或换行分隔。</p>
+      <p class="hint">多个食材可以用顿号、逗号、空格或换行分隔。系统会优先从匹配食材的菜里抽选。</p>
     </section>
 
     <section class="panel add-dish" aria-labelledby="add-dish-title">
@@ -54,25 +68,26 @@
       <form id="dish-form" class="dish-form">
         <label class="field">
           <span>菜名</span>
-          <input id="dish-name-input" type="text" placeholder="例如：蒜蓉西兰花" required>
+          <input id="dish-name-input" type="text" list="dish-suggestions" placeholder="例如：蒜蓉西兰花" required>
+          <datalist id="dish-suggestions"></datalist>
         </label>
         <label class="field">
           <span>需要的食材</span>
-          <input id="dish-ingredients-input" type="text" placeholder="例如：西兰花、蒜">
+          <input id="dish-ingredients-input" type="text" placeholder="输入菜名后自动补充，可手动调整">
         </label>
         <button class="secondary-button" type="submit">添加到抽签库</button>
       </form>
       <p id="form-message" class="form-message" aria-live="polite"></p>
     </section>
 
-    <section class="panel dish-list" aria-labelledby="dish-list-title">
+    <section class="panel dish-library" aria-labelledby="dish-list-title">
       <div class="section-heading">
         <div>
           <p class="section-kicker">抽签库</p>
-          <h2 id="dish-list-title">候选家常菜</h2>
+          <h2 id="dish-list-title">我会做的家常菜</h2>
         </div>
       </div>
-      <ul id="dish-list"></ul>
+      <div id="dish-groups" class="dish-groups"></div>
     </section>
   </main>
 
