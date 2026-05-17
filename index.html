@@ -38,7 +38,7 @@
           <p class="section-kicker">想吃点新的</p>
           <h2 id="new-dish-title">随机发现一道菜</h2>
         </div>
-        <p class="match-count">包含抽签库和新菜灵感</p>
+        <p class="match-count">只抽还没加入抽签库的新菜</p>
       </div>
 
       <label class="field compact-field">
@@ -64,12 +64,17 @@
       </div>
 
       <div id="quick-ingredient-tags" class="tag-list" aria-label="快捷食材标签"></div>
+      <form id="quick-ingredient-form" class="inline-form">
+        <input id="quick-ingredient-input" type="text" placeholder="添加常用食材，例如：牛肉">
+        <button class="ghost-button" type="submit">添加常用食材</button>
+      </form>
       <label class="field">
         <span>食材名称</span>
         <textarea id="fridge-input" rows="3" placeholder="例如：鸡蛋、番茄、土豆、青椒"></textarea>
       </label>
       <button id="clear-fridge-button" class="ghost-button" type="button">清空食材</button>
       <p class="hint">多个食材可以用顿号、逗号、空格或换行分隔。系统会优先从匹配食材的菜里抽选。</p>
+      <div id="matched-dish-panel" class="matched-dish-panel"></div>
     </section>
 
     <section class="panel add-dish" aria-labelledby="add-dish-title">
@@ -167,6 +172,16 @@
         </label>
       </div>
       <div id="dish-groups" class="dish-groups"></div>
+    </section>
+
+    <section class="panel category-manager" aria-labelledby="category-manager-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">分类管理</p>
+          <h2 id="category-manager-title">重命名抽签库大类</h2>
+        </div>
+      </div>
+      <div id="category-manager-list" class="category-manager-list"></div>
     </section>
   </main>
 

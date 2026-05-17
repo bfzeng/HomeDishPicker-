@@ -267,7 +267,8 @@ select {
 }
 
 .form-grid,
-.button-grid {
+.button-grid,
+.inline-form {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
@@ -294,6 +295,11 @@ select {
   margin-bottom: 16px;
 }
 
+.tag-shell {
+  display: inline-flex;
+  align-items: center;
+}
+
 .tag {
   border: 1px solid #cadccf;
   border-radius: 999px;
@@ -317,6 +323,78 @@ select {
 
 .tag.is-selected:hover {
   background: #256747;
+}
+
+.tag-delete {
+  width: 28px;
+  height: 28px;
+  margin-left: -8px;
+  border: 1px solid #e3b8ad;
+  border-radius: 999px;
+  background: #fff;
+  color: #a33b2d;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.inline-form {
+  margin-bottom: 16px;
+}
+
+.matched-dish-panel {
+  margin-top: 16px;
+  padding: 14px;
+  border: 1px solid #dbe8df;
+  border-radius: 8px;
+  background: #f8fcf8;
+}
+
+.matched-dish-panel h3 {
+  margin: 0 0 12px;
+  font-size: 17px;
+}
+
+.matched-dish-panel ul,
+.category-manager-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.matched-dish-panel li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid #e5eee8;
+}
+
+.matched-dish-panel span {
+  font-weight: 700;
+}
+
+.matched-dish-panel small {
+  color: #6a756f;
+}
+
+.matched-dish-panel a {
+  color: #2f7d57;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.category-form {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr) 140px;
+  gap: 12px;
+  align-items: center;
+}
+
+.category-form span {
+  font-weight: 700;
 }
 
 .dish-groups {
@@ -479,7 +557,9 @@ select {
 
   .dish-grid,
   .form-grid,
-  .button-grid {
+  .button-grid,
+  .inline-form,
+  .category-form {
     grid-template-columns: 1fr;
   }
 

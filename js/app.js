@@ -1,10 +1,12 @@
 const STORAGE_KEY = "homeDishPicker.customDishes";
 const HISTORY_KEY = "homeDishPicker.drawHistory";
+const QUICK_INGREDIENTS_KEY = "homeDishPicker.quickIngredients";
+const CATEGORY_RENAMES_KEY = "homeDishPicker.categoryRenames";
 const ROLLING_DURATION = 1200;
 const ROLLING_INTERVAL = 80;
 const MAX_HISTORY = 12;
 
-const quickIngredients = ["鸡蛋", "番茄", "土豆", "青椒", "豆腐", "猪肉", "鸡肉", "蒜", "米饭", "面条", "香菇", "虾仁"];
+const defaultQuickIngredients = ["鸡蛋", "番茄", "土豆", "青椒", "豆腐", "猪肉", "鸡肉", "蒜", "米饭", "面条", "香菇", "虾仁"];
 
 const defaultDishes = [
   { name: "番茄炒蛋", ingredients: ["番茄", "鸡蛋"], category: "快手下饭", status: "常吃", note: "经典快手菜" },
@@ -31,12 +33,38 @@ const inspirationDishes = [
   { name: "咖喱鸡肉饭", ingredients: ["鸡肉", "土豆", "胡萝卜", "咖喱"], category: "主食", status: "想尝试", note: "一锅出" },
   { name: "肥牛金针菇", ingredients: ["肥牛", "金针菇"], category: "肉菜", status: "想尝试", note: "快手" },
   { name: "菠菜鸡蛋汤", ingredients: ["菠菜", "鸡蛋"], category: "汤羹", status: "想尝试", note: "清淡" },
-  { name: "冬瓜排骨汤", ingredients: ["冬瓜", "排骨"], category: "汤羹", status: "想尝试", note: "适合周末" }
+  { name: "冬瓜排骨汤", ingredients: ["冬瓜", "排骨"], category: "汤羹", status: "想尝试", note: "适合周末" },
+  { name: "番茄牛腩", ingredients: ["番茄", "牛腩"], category: "肉菜", status: "想尝试", note: "周末慢炖" },
+  { name: "椒盐虾", ingredients: ["虾", "椒盐"], category: "肉菜", status: "想尝试", note: "香脆" },
+  { name: "蒜香鸡翅", ingredients: ["鸡翅", "蒜"], category: "肉菜", status: "想尝试", note: "烤箱或空气炸锅" },
+  { name: "肉末蒸蛋", ingredients: ["鸡蛋", "肉末"], category: "快手下饭", status: "想尝试", note: "嫩滑" },
+  { name: "西红柿炖牛肉", ingredients: ["西红柿", "牛肉"], category: "肉菜", status: "想尝试", note: "酸甜浓郁" },
+  { name: "蚝油生菜", ingredients: ["生菜", "蚝油"], category: "素菜", status: "想尝试", note: "快手青菜" },
+  { name: "上汤娃娃菜", ingredients: ["娃娃菜", "皮蛋"], category: "汤羹", status: "想尝试", note: "清甜" },
+  { name: "黑椒牛柳", ingredients: ["牛肉", "洋葱", "黑椒"], category: "肉菜", status: "想尝试", note: "下饭" },
+  { name: "南瓜蒸排骨", ingredients: ["南瓜", "排骨"], category: "肉菜", status: "想尝试", note: "蒸菜" },
+  { name: "酸菜鱼", ingredients: ["鱼片", "酸菜"], category: "肉菜", status: "想尝试", note: "开胃" },
+  { name: "白灼菜心", ingredients: ["菜心"], category: "素菜", status: "想尝试", note: "清爽" },
+  { name: "菌菇鸡汤", ingredients: ["菌菇", "鸡肉"], category: "汤羹", status: "想尝试", note: "暖胃" },
+  { name: "日式亲子丼", ingredients: ["鸡肉", "鸡蛋", "米饭"], category: "主食", status: "想尝试", note: "一碗饭" },
+  { name: "肉酱意面", ingredients: ["意面", "肉末", "番茄"], category: "主食", status: "想尝试", note: "换口味" },
+  { name: "三杯鸡", ingredients: ["鸡肉", "九层塔"], category: "肉菜", status: "想尝试", note: "香气浓" },
+  { name: "糖醋里脊", ingredients: ["猪里脊"], category: "肉菜", status: "想尝试", note: "酸甜口" },
+  { name: "凉拌黄瓜", ingredients: ["黄瓜", "蒜"], category: "凉菜", status: "想尝试", note: "清爽" },
+  { name: "皮蛋豆腐", ingredients: ["皮蛋", "豆腐"], category: "凉菜", status: "想尝试", note: "免开火" },
+  { name: "山药排骨汤", ingredients: ["山药", "排骨"], category: "汤羹", status: "想尝试", note: "滋补" },
+  { name: "土豆炖牛肉", ingredients: ["土豆", "牛肉"], category: "肉菜", status: "想尝试", note: "家常硬菜" },
+  { name: "芹菜炒香干", ingredients: ["芹菜", "香干"], category: "素菜", status: "想尝试", note: "下饭" },
+  { name: "茄汁大虾", ingredients: ["虾", "番茄酱"], category: "肉菜", status: "想尝试", note: "酸甜" },
+  { name: "牛肉炒河粉", ingredients: ["牛肉", "河粉"], category: "主食", status: "想尝试", note: "饱腹" },
+  { name: "番茄鸡蛋面", ingredients: ["番茄", "鸡蛋", "面条"], category: "主食", status: "想尝试", note: "快手" }
 ];
 
 let dishes = [];
 let fridgeIngredients = [];
 let drawHistory = [];
+let quickIngredients = [];
+let categoryRenames = {};
 let noRepeatNames = [];
 let rollingTimer = null;
 let newDishRollingTimer = null;
@@ -45,6 +73,9 @@ let lastNewDish = null;
 document.addEventListener("DOMContentLoaded", () => {
   dishes = loadDishes();
   drawHistory = loadHistory();
+  quickIngredients = loadQuickIngredients();
+  categoryRenames = loadCategoryRenames();
+  dishes = applyCategoryRenames(dishes);
 
   const elements = getElements();
 
@@ -65,6 +96,8 @@ function getElements() {
     saveNewDishButton: document.querySelector("#save-new-dish-button"),
     dishGroups: document.querySelector("#dish-groups"),
     quickIngredientTags: document.querySelector("#quick-ingredient-tags"),
+    quickIngredientForm: document.querySelector("#quick-ingredient-form"),
+    quickIngredientInput: document.querySelector("#quick-ingredient-input"),
     fridgeInput: document.querySelector("#fridge-input"),
     clearFridgeButton: document.querySelector("#clear-fridge-button"),
     matchCount: document.querySelector("#match-count"),
@@ -86,7 +119,9 @@ function getElements() {
     dataMessage: document.querySelector("#data-message"),
     historyList: document.querySelector("#history-list"),
     clearHistoryButton: document.querySelector("#clear-history-button"),
-    libraryStatusFilter: document.querySelector("#library-status-filter")
+    libraryStatusFilter: document.querySelector("#library-status-filter"),
+    matchedDishPanel: document.querySelector("#matched-dish-panel"),
+    categoryManagerList: document.querySelector("#category-manager-list")
   };
 }
 
@@ -99,8 +134,18 @@ function bindEvents(elements) {
 
   elements.quickIngredientTags.addEventListener("click", (event) => {
     const button = event.target.closest("[data-ingredient]");
+    const deleteButton = event.target.closest("[data-delete-ingredient]");
+    if (deleteButton) {
+      deleteQuickIngredient(deleteButton.dataset.deleteIngredient, elements);
+      return;
+    }
     if (!button) return;
     toggleIngredient(button.dataset.ingredient, elements);
+  });
+
+  elements.quickIngredientForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    addQuickIngredient(elements);
   });
 
   elements.clearFridgeButton.addEventListener("click", () => {
@@ -211,6 +256,13 @@ function bindEvents(elements) {
   elements.libraryStatusFilter.addEventListener("change", () => {
     renderDishGroups(elements);
   });
+
+  elements.categoryManagerList.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const form = event.target.closest("[data-category-form]");
+    if (!form) return;
+    renameCategory(form.dataset.categoryForm, form.querySelector("input").value, elements);
+  });
 }
 
 function renderAll(elements) {
@@ -218,14 +270,17 @@ function renderAll(elements) {
   renderNewDishCategories(elements.newDishCategory);
   renderDishSuggestions(elements.dishSuggestions);
   renderDishGroups(elements);
+  renderCategoryManager(elements);
   renderHistory(elements.historyList);
   updateMatchCount(elements.matchCount);
+  renderMatchedDishPanel(elements);
 }
 
 function renderFridgeDependentViews(elements) {
   renderQuickIngredientTags(elements.quickIngredientTags);
   renderDishGroups(elements);
   updateMatchCount(elements.matchCount);
+  renderMatchedDishPanel(elements);
 }
 
 function loadDishes() {
@@ -238,6 +293,16 @@ function loadDishes() {
 
 function loadHistory() {
   return readJson(HISTORY_KEY, []);
+}
+
+function loadQuickIngredients() {
+  const savedIngredients = readJson(QUICK_INGREDIENTS_KEY, null);
+  return Array.isArray(savedIngredients) ? savedIngredients : [...defaultQuickIngredients];
+}
+
+function loadCategoryRenames() {
+  const savedRenames = readJson(CATEGORY_RENAMES_KEY, {});
+  return savedRenames && typeof savedRenames === "object" && !Array.isArray(savedRenames) ? savedRenames : {};
 }
 
 function readJson(key, fallback) {
@@ -254,6 +319,14 @@ function saveCustomDishes(customDishes) {
 
 function saveHistory() {
   localStorage.setItem(HISTORY_KEY, JSON.stringify(drawHistory));
+}
+
+function saveQuickIngredients() {
+  localStorage.setItem(QUICK_INGREDIENTS_KEY, JSON.stringify(quickIngredients));
+}
+
+function saveCategoryRenames() {
+  localStorage.setItem(CATEGORY_RENAMES_KEY, JSON.stringify(categoryRenames));
 }
 
 function saveDishFromForm(elements) {
@@ -348,6 +421,69 @@ function resetDishForm(elements) {
   elements.cancelEditButton.classList.add("hidden");
 }
 
+function addQuickIngredient(elements) {
+  const ingredient = elements.quickIngredientInput.value.trim();
+  if (!ingredient) return;
+
+  if (!quickIngredients.includes(ingredient)) {
+    quickIngredients.push(ingredient);
+    saveQuickIngredients();
+  }
+
+  elements.quickIngredientInput.value = "";
+  renderQuickIngredientTags(elements.quickIngredientTags);
+}
+
+function deleteQuickIngredient(ingredient, elements) {
+  quickIngredients = quickIngredients.filter((item) => item !== ingredient);
+  fridgeIngredients = fridgeIngredients.filter((item) => item !== ingredient);
+  elements.fridgeInput.value = fridgeIngredients.join("、");
+  saveQuickIngredients();
+  renderFridgeDependentViews(elements);
+}
+
+function renameCategory(oldCategory, newCategory, elements) {
+  const trimmedCategory = newCategory.trim();
+  if (!trimmedCategory || trimmedCategory === oldCategory) return;
+
+  const customDishes = getCustomDishes();
+  const renamedCustomDishes = customDishes.map((dish) => {
+    if (dish.category === oldCategory) {
+      return { ...dish, category: trimmedCategory };
+    }
+    return dish;
+  });
+  const renamedDefaultDishes = defaultDishes.map((dish) => normalizeDish(dish));
+
+  categoryRenames[oldCategory] = trimmedCategory;
+  saveCategoryRenames();
+  dishes = [...renamedDefaultDishes, ...renamedCustomDishes];
+  dishes = applyCategoryRenames(dishes);
+  saveCustomDishes(renamedCustomDishes);
+  renderAll(elements);
+}
+
+function applyCategoryRenames(dishList) {
+  return dishList.map((dish) => {
+    return {
+      ...dish,
+      category: resolveCategoryRename(dish.category)
+    };
+  });
+}
+
+function resolveCategoryRename(category) {
+  let currentCategory = category;
+  const visited = new Set();
+
+  while (categoryRenames[currentCategory] && !visited.has(currentCategory)) {
+    visited.add(currentCategory);
+    currentCategory = categoryRenames[currentCategory];
+  }
+
+  return currentCategory;
+}
+
 function autofillDishForm(elements) {
   const name = elements.dishNameInput.value.trim();
   const suggestion = findDishSuggestion(name);
@@ -413,11 +549,13 @@ function getDrawableLibraryDishes(useNoRepeat) {
 
 function getNewDishCandidates() {
   const selectedCategory = document.querySelector("#new-dish-category").value;
+  const libraryNames = new Set(dishes.map((dish) => dish.name));
   const uniqueCandidates = new Map();
 
-  [...dishes, ...inspirationDishes].forEach((dish) => {
-    if (selectedCategory === "全部" || dish.category === selectedCategory) {
-      uniqueCandidates.set(dish.name, normalizeDish(dish));
+  inspirationDishes.forEach((dish) => {
+    const normalizedDish = applyCategoryRenames([normalizeDish(dish)])[0];
+    if (!libraryNames.has(normalizedDish.name) && (selectedCategory === "全部" || normalizedDish.category === selectedCategory)) {
+      uniqueCandidates.set(normalizedDish.name, normalizedDish);
     }
   });
 
@@ -459,7 +597,12 @@ function pickRandomDish(candidateDishes) {
 function renderQuickIngredientTags(container) {
   container.innerHTML = quickIngredients.map((ingredient) => {
     const isSelected = fridgeIngredients.includes(ingredient);
-    return `<button class="tag${isSelected ? " is-selected" : ""}" type="button" data-ingredient="${escapeHtml(ingredient)}">${escapeHtml(ingredient)}</button>`;
+    return `
+      <span class="tag-shell">
+        <button class="tag${isSelected ? " is-selected" : ""}" type="button" data-ingredient="${escapeAttribute(ingredient)}">${escapeHtml(ingredient)}</button>
+        <button class="tag-delete" type="button" aria-label="删除${escapeAttribute(ingredient)}" data-delete-ingredient="${escapeAttribute(ingredient)}">×</button>
+      </span>
+    `;
   }).join("");
 }
 
@@ -519,6 +662,44 @@ function renderDishGroups(elements) {
   });
 }
 
+function renderMatchedDishPanel(elements) {
+  if (fridgeIngredients.length === 0) {
+    elements.matchedDishPanel.innerHTML = "";
+    return;
+  }
+
+  const candidates = getCandidateDishes();
+  if (candidates.length === 0) {
+    elements.matchedDishPanel.innerHTML = `<p class="empty-state">当前食材暂时没有匹配菜品，可以补充菜品或尝试新菜。</p>`;
+    return;
+  }
+
+  elements.matchedDishPanel.innerHTML = `
+    <h3>这些食材可以参考做</h3>
+    <ul>
+      ${candidates.map((dish) => `
+        <li>
+          <span>${escapeHtml(dish.name)}</span>
+          <small>${escapeHtml(getRecommendationLabel(dish, true))}</small>
+          <a href="${escapeAttribute(getTutorialUrl(dish))}" target="_blank" rel="noreferrer">教程</a>
+        </li>
+      `).join("")}
+    </ul>
+  `;
+}
+
+function renderCategoryManager(elements) {
+  const categories = Object.keys(groupDishesByCategory(dishes));
+
+  elements.categoryManagerList.innerHTML = categories.map((category) => `
+    <form class="category-form" data-category-form="${escapeAttribute(category)}">
+      <span>${escapeHtml(category)}</span>
+      <input type="text" value="${escapeAttribute(category)}" aria-label="重命名${escapeAttribute(category)}">
+      <button class="ghost-button" type="submit">保存名称</button>
+    </form>
+  `).join("");
+}
+
 function renderDishSuggestions(datalistElement) {
   const suggestionNames = new Set();
 
@@ -538,7 +719,13 @@ function renderDishSuggestions(datalistElement) {
 
 function renderNewDishCategories(selectElement) {
   const categories = new Set(["全部"]);
-  [...dishes, ...inspirationDishes].forEach((dish) => categories.add(dish.category || "我添加的菜"));
+  const libraryNames = new Set(dishes.map((dish) => dish.name));
+  inspirationDishes.forEach((dish) => {
+    const normalizedDish = applyCategoryRenames([normalizeDish(dish)])[0];
+    if (!libraryNames.has(normalizedDish.name)) {
+      categories.add(normalizedDish.category || "我添加的菜");
+    }
+  });
   const currentValue = selectElement.value || "全部";
 
   selectElement.innerHTML = Array.from(categories).map((category) => {
@@ -617,6 +804,8 @@ function exportLibrary() {
     version: 1,
     exportedAt: new Date().toISOString(),
     customDishes: getCustomDishes(),
+    quickIngredients,
+    categoryRenames,
     history: drawHistory
   };
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
@@ -648,6 +837,15 @@ function importLibrary(elements) {
         drawHistory = data.history.slice(0, MAX_HISTORY);
         saveHistory();
       }
+      if (Array.isArray(data.quickIngredients)) {
+        quickIngredients = data.quickIngredients.map(String).filter(Boolean);
+        saveQuickIngredients();
+      }
+      if (data.categoryRenames && typeof data.categoryRenames === "object" && !Array.isArray(data.categoryRenames)) {
+        categoryRenames = data.categoryRenames;
+        saveCategoryRenames();
+        dishes = applyCategoryRenames(dishes);
+      }
       noRepeatNames = [];
       showMessage(elements.dataMessage, "导入成功。", "success");
       renderAll(elements);
@@ -666,8 +864,12 @@ function resetCustomData(elements) {
 
   localStorage.removeItem(STORAGE_KEY);
   localStorage.removeItem(HISTORY_KEY);
+  localStorage.removeItem(QUICK_INGREDIENTS_KEY);
+  localStorage.removeItem(CATEGORY_RENAMES_KEY);
   dishes = defaultDishes.map((dish) => normalizeDish(dish));
   drawHistory = [];
+  quickIngredients = [...defaultQuickIngredients];
+  categoryRenames = {};
   fridgeIngredients = [];
   noRepeatNames = [];
   lastNewDish = null;
