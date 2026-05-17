@@ -280,6 +280,10 @@ git push
 - 编写清晰的 README
 - 将功能拆分成合理的 commit
 
+## 项目总结
+
+项目学习总结见：[HomeDishPicker 项目总结](docs/project-summary.md)。
+
 ## 推荐 Commit 划分
 
 本项目第一版按照以下思路拆分提交：
